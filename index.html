@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Do You Love Me? 💖</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins",sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#ffd6e8,#ffeef7,#ffd6f6);
+}
+
+/* MAIN CARD */
+.card{
+    width:min(90%,500px);
+    background:white;
+    border-radius:30px;
+    padding:40px;
+    text-align:center;
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
+    z-index:5;
+}
+
+h1{
+    color:#ff4f87;
+    font-size:2.2rem;
+}
+
+p{color:#666;margin-top:10px;}
+
+.buttons{
+    margin-top:35px;
+    height:70px;
+    position:relative;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    padding:15px 35px;
+    border-radius:50px;
+    font-size:1rem;
+    position:absolute;
+}
+
+#yes{
+    left:25%;
+    background:#ff5c93;
+    color:white;
+}
+
+#no{
+    right:25%;
+    background:#e9e9e9;
+}
+
+/* OVERLAY */
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.4);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:10;
+}
+
+.letter{
+    width:min(90%,450px);
+    background:#fff;
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+    animation:pop .3s ease;
+}
+
+@keyframes pop{
+    from{transform:scale(.6);opacity:0;}
+    to{transform:scale(1);opacity:1;}
+}
+
+.letter h2{
+    color:#ff4f87;
+    margin-bottom:15px;
+}
+
+/* TYPEWRITER TEXT */
+#typedText{
+    color:#444;
+    font-size:1.05rem;
+    line-height:1.6;
+    min-height:120px;
+    white-space:pre-line;
+}
+
+.cursor{
+    display:inline-block;
+    width:10px;
+    background:#ff4f87;
+    margin-left:3px;
+    animation:blink .7s infinite;
+}
+
+@keyframes blink{
+    50%{opacity:0;}
+}
+
+.closeBtn{
+    margin-top:20px;
+    background:#ff5c93;
+    color:white;
+    padding:10px 20px;
+    border-radius:20px;
+    cursor:pointer;
+    text-align:center;
+}
+
+/* HEARTS */
+.heart{
+    position:absolute;
+    color:#ff4f87;
+    animation:float linear forwards;
+    pointer-events:none;
+}
+
+@keyframes float{
+    from{transform:translateY(100vh);opacity:0;}
+    20%{opacity:1;}
+    to{transform:translateY(-120px);opacity:0;}
+}
+
+/* CONFETTI */
+.confetti{
+    position:absolute;
+    animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+    from{transform:translateY(-20px) rotate(0);}
+    to{transform:translateY(110vh) rotate(720deg);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>Do you love me? 🥺💖</h1>
+    <p>You only have one correct answer...</p>
+
+    <div class="buttons">
+        <button id="yes">Yes ❤️</button>
+        <button id="no">No 💔</button>
+    </div>
+</div>
+
+<!-- LETTER -->
+<div class="overlay" id="overlay">
+    <div class="letter">
+        <h2>💌 A little letter for you</h2>
+        <div id="typedText"></div>
+        <div class="closeBtn" onclick="closeLetter()">Close 💖</div>
+    </div>
+</div>
+
+<script>
+const yes=document.getElementById("yes");
+const no=document.getElementById("no");
+const overlay=document.getElementById("overlay");
+const typedText=document.getElementById("typedText");
+
+const fullText =
+`I can't describe how much I miss you.
+
+My days are longer when you're not around.
+
+I hope this makes you smile ❤️
+
+Love you lots, baby 💕`;
+
+let index=0;
+let typingInterval;
+
+/* NO button runs away */
+no.addEventListener("mouseenter",()=>{
+    no.style.position="absolute";
+    no.style.left=Math.random()*70+"%";
+    no.style.top=Math.random()*70+"%";
+});
+
+/* YES clicked */
+yes.onclick=()=>{
+    overlay.style.display="flex";
+    typedText.innerHTML="";
+    index=0;
+
+    launchTypewriter();
+    launchConfetti();
+};
+
+/* TYPEWRITER EFFECT */
+function launchTypewriter(){
+    clearInterval(typingInterval);
+
+    typingInterval=setInterval(()=>{
+        if(index < fullText.length){
+            typedText.innerHTML =
+                fullText.substring(0,index) + "<span class='cursor'></span>";
+            index++;
+        }else{
+            clearInterval(typingInterval);
+            typedText.innerHTML = fullText;
+        }
+    },40);
+}
+
+/* CLOSE */
+function closeLetter(){
+    overlay.style.display="none";
+}
+
+/* SIMPLE CONFETTI */
+function launchConfetti(){
+    for(let i=0;i<120;i++){
+        const c=document.createElement("div");
+        c.className="confetti";
+        c.style.left=Math.random()*100+"vw";
+        c.style.background=["#ff5c93","#ffcc00","#66ccff","#7cff7c"][Math.floor(Math.random()*4)];
+        c.style.width=c.style.height=(6+Math.random()*8)+"px";
+        c.style.animationDuration=(2+Math.random()*2)+"s";
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),4000);
+    }
+}
+</script>
+
+</body>
+</html>
